@@ -46,6 +46,6 @@ service PostService {
   rpc GetPost(GetPostRequest) returns (PostResponse);
   rpc UpdatePost(PostRequest) returns (PostResponse);
   rpc DeletePost(GetPostListRequest) returns (PostDeleteResponse);
-  rpc ListPosts(GetPostRequest) returns (ListPostsResponse);
-  rpc ListPostsByAuthor(GetPostRequest) returns (ListPostsResponse);
+  rpc ListPosts(GetPostListRequest) returns (ListPostsResponse);
+  rpc ListPostsByAuthor(GetPostListByAuthorRequest) returns (ListPostsResponse);
 }
