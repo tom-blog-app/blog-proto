@@ -30,7 +30,7 @@ message GetLogRequest {
 }
 
 message ListLogsResponse {
-    repeated Log log = 1;
+    repeated Log logs = 1;
 }
 
 message GetLogListRequest {
@@ -44,7 +44,7 @@ message GetLogListRequestByDate {
 }
 
 message ListLogsByDateResponse {
-    repeated Log log = 1;
+    repeated Log logs = 1;
 }
 
 service LogService {
