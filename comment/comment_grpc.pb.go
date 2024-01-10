@@ -31,9 +31,9 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type PostServiceClient interface {
-	CreateComment(ctx context.Context, in *CommentRequest, opts ...grpc.CallOption) (*PostResponse, error)
-	GetComment(ctx context.Context, in *GetCommentRequest, opts ...grpc.CallOption) (*PostResponse, error)
-	UpdateComment(ctx context.Context, in *CommentRequest, opts ...grpc.CallOption) (*PostResponse, error)
+	CreateComment(ctx context.Context, in *CommentRequest, opts ...grpc.CallOption) (*CommentResponse, error)
+	GetComment(ctx context.Context, in *GetCommentRequest, opts ...grpc.CallOption) (*CommentResponse, error)
+	UpdateComment(ctx context.Context, in *CommentRequest, opts ...grpc.CallOption) (*CommentResponse, error)
 	DeleteComment(ctx context.Context, in *GetCommentRequest, opts ...grpc.CallOption) (*CommentDeleteResponse, error)
 	ListCommentByAuthor(ctx context.Context, in *GetCommentRequest, opts ...grpc.CallOption) (*ListCommentResponse, error)
 	ListCommentByPost(ctx context.Context, in *GetCommentRequest, opts ...grpc.CallOption) (*ListCommentResponse, error)
@@ -47,8 +47,8 @@ func NewPostServiceClient(cc grpc.ClientConnInterface) PostServiceClient {
 	return &postServiceClient{cc}
 }
 
-func (c *postServiceClient) CreateComment(ctx context.Context, in *CommentRequest, opts ...grpc.CallOption) (*PostResponse, error) {
-	out := new(PostResponse)
+func (c *postServiceClient) CreateComment(ctx context.Context, in *CommentRequest, opts ...grpc.CallOption) (*CommentResponse, error) {
+	out := new(CommentResponse)
 	err := c.cc.Invoke(ctx, PostService_CreateComment_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -56,8 +56,8 @@ func (c *postServiceClient) CreateComment(ctx context.Context, in *CommentReques
 	return out, nil
 }
 
-func (c *postServiceClient) GetComment(ctx context.Context, in *GetCommentRequest, opts ...grpc.CallOption) (*PostResponse, error) {
-	out := new(PostResponse)
+func (c *postServiceClient) GetComment(ctx context.Context, in *GetCommentRequest, opts ...grpc.CallOption) (*CommentResponse, error) {
+	out := new(CommentResponse)
 	err := c.cc.Invoke(ctx, PostService_GetComment_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -65,8 +65,8 @@ func (c *postServiceClient) GetComment(ctx context.Context, in *GetCommentReques
 	return out, nil
 }
 
-func (c *postServiceClient) UpdateComment(ctx context.Context, in *CommentRequest, opts ...grpc.CallOption) (*PostResponse, error) {
-	out := new(PostResponse)
+func (c *postServiceClient) UpdateComment(ctx context.Context, in *CommentRequest, opts ...grpc.CallOption) (*CommentResponse, error) {
+	out := new(CommentResponse)
 	err := c.cc.Invoke(ctx, PostService_UpdateComment_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -105,9 +105,9 @@ func (c *postServiceClient) ListCommentByPost(ctx context.Context, in *GetCommen
 // All implementations must embed UnimplementedPostServiceServer
 // for forward compatibility
 type PostServiceServer interface {
-	CreateComment(context.Context, *CommentRequest) (*PostResponse, error)
-	GetComment(context.Context, *GetCommentRequest) (*PostResponse, error)
-	UpdateComment(context.Context, *CommentRequest) (*PostResponse, error)
+	CreateComment(context.Context, *CommentRequest) (*CommentResponse, error)
+	GetComment(context.Context, *GetCommentRequest) (*CommentResponse, error)
+	UpdateComment(context.Context, *CommentRequest) (*CommentResponse, error)
 	DeleteComment(context.Context, *GetCommentRequest) (*CommentDeleteResponse, error)
 	ListCommentByAuthor(context.Context, *GetCommentRequest) (*ListCommentResponse, error)
 	ListCommentByPost(context.Context, *GetCommentRequest) (*ListCommentResponse, error)
@@ -118,13 +118,13 @@ type PostServiceServer interface {
 type UnimplementedPostServiceServer struct {
 }
 
-func (UnimplementedPostServiceServer) CreateComment(context.Context, *CommentRequest) (*PostResponse, error) {
+func (UnimplementedPostServiceServer) CreateComment(context.Context, *CommentRequest) (*CommentResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateComment not implemented")
 }
-func (UnimplementedPostServiceServer) GetComment(context.Context, *GetCommentRequest) (*PostResponse, error) {
+func (UnimplementedPostServiceServer) GetComment(context.Context, *GetCommentRequest) (*CommentResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetComment not implemented")
 }
-func (UnimplementedPostServiceServer) UpdateComment(context.Context, *CommentRequest) (*PostResponse, error) {
+func (UnimplementedPostServiceServer) UpdateComment(context.Context, *CommentRequest) (*CommentResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateComment not implemented")
 }
 func (UnimplementedPostServiceServer) DeleteComment(context.Context, *GetCommentRequest) (*CommentDeleteResponse, error) {

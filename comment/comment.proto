@@ -19,7 +19,7 @@ message CommentRequest {
   Comment comment = 1;
 }
 
-message PostResponse {
+message CommentResponse {
   Comment comment = 1;
 }
 
@@ -37,9 +37,9 @@ message ListCommentResponse {
 }
 
 service PostService {
-  rpc CreateComment(CommentRequest) returns (PostResponse);
-  rpc GetComment(GetCommentRequest) returns (PostResponse);
-  rpc UpdateComment(CommentRequest) returns (PostResponse);
+  rpc CreateComment(CommentRequest) returns (CommentResponse);
+  rpc GetComment(GetCommentRequest) returns (CommentResponse);
+  rpc UpdateComment(CommentRequest) returns (CommentResponse);
   rpc DeleteComment(GetCommentRequest) returns (CommentDeleteResponse);
   rpc ListCommentByAuthor(GetCommentRequest) returns (ListCommentResponse);
   rpc ListCommentByPost(GetCommentRequest) returns (ListCommentResponse);
