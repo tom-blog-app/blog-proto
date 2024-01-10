@@ -9,6 +9,7 @@ package log
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
 	reflect "reflect"
 	sync "sync"
 )
@@ -25,8 +26,10 @@ type Log struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	Data string `protobuf:"bytes,2,opt,name=data,proto3" json:"data,omitempty"`
+	Id        string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Name      string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Content   string                 `protobuf:"bytes,3,opt,name=content,proto3" json:"content,omitempty"`
+	CreatedAt *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=createdAt,proto3" json:"createdAt,omitempty"`
 }
 
 func (x *Log) Reset() {
@@ -61,6 +64,13 @@ func (*Log) Descriptor() ([]byte, []int) {
 	return file_log_log_proto_rawDescGZIP(), []int{0}
 }
 
+func (x *Log) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
 func (x *Log) GetName() string {
 	if x != nil {
 		return x.Name
@@ -68,11 +78,18 @@ func (x *Log) GetName() string {
 	return ""
 }
 
-func (x *Log) GetData() string {
+func (x *Log) GetContent() string {
 	if x != nil {
-		return x.Data
+		return x.Content
 	}
 	return ""
+}
+
+func (x *Log) GetCreatedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return nil
 }
 
 type LogRequest struct {
@@ -80,7 +97,7 @@ type LogRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	LogEntry *Log `protobuf:"bytes,1,opt,name=logEntry,proto3" json:"logEntry,omitempty"`
+	Log *Log `protobuf:"bytes,1,opt,name=log,proto3" json:"log,omitempty"`
 }
 
 func (x *LogRequest) Reset() {
@@ -115,9 +132,9 @@ func (*LogRequest) Descriptor() ([]byte, []int) {
 	return file_log_log_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *LogRequest) GetLogEntry() *Log {
+func (x *LogRequest) GetLog() *Log {
 	if x != nil {
-		return x.LogEntry
+		return x.Log
 	}
 	return nil
 }
@@ -127,7 +144,7 @@ type LogResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Result string `protobuf:"bytes,1,opt,name=result,proto3" json:"result,omitempty"`
+	Log *Log `protobuf:"bytes,1,opt,name=log,proto3" json:"log,omitempty"`
 }
 
 func (x *LogResponse) Reset() {
@@ -162,31 +179,361 @@ func (*LogResponse) Descriptor() ([]byte, []int) {
 	return file_log_log_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *LogResponse) GetResult() string {
+func (x *LogResponse) GetLog() *Log {
 	if x != nil {
-		return x.Result
+		return x.Log
+	}
+	return nil
+}
+
+type LogDeleteResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Id      string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Success bool   `protobuf:"varint,2,opt,name=success,proto3" json:"success,omitempty"`
+}
+
+func (x *LogDeleteResponse) Reset() {
+	*x = LogDeleteResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_log_log_proto_msgTypes[3]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *LogDeleteResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*LogDeleteResponse) ProtoMessage() {}
+
+func (x *LogDeleteResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_log_log_proto_msgTypes[3]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use LogDeleteResponse.ProtoReflect.Descriptor instead.
+func (*LogDeleteResponse) Descriptor() ([]byte, []int) {
+	return file_log_log_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *LogDeleteResponse) GetId() string {
+	if x != nil {
+		return x.Id
 	}
 	return ""
+}
+
+func (x *LogDeleteResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+type GetLogRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+}
+
+func (x *GetLogRequest) Reset() {
+	*x = GetLogRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_log_log_proto_msgTypes[4]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GetLogRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetLogRequest) ProtoMessage() {}
+
+func (x *GetLogRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_log_log_proto_msgTypes[4]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetLogRequest.ProtoReflect.Descriptor instead.
+func (*GetLogRequest) Descriptor() ([]byte, []int) {
+	return file_log_log_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *GetLogRequest) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+type ListLogsResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Log []*Log `protobuf:"bytes,1,rep,name=log,proto3" json:"log,omitempty"`
+}
+
+func (x *ListLogsResponse) Reset() {
+	*x = ListLogsResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_log_log_proto_msgTypes[5]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ListLogsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListLogsResponse) ProtoMessage() {}
+
+func (x *ListLogsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_log_log_proto_msgTypes[5]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListLogsResponse.ProtoReflect.Descriptor instead.
+func (*ListLogsResponse) Descriptor() ([]byte, []int) {
+	return file_log_log_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *ListLogsResponse) GetLog() []*Log {
+	if x != nil {
+		return x.Log
+	}
+	return nil
+}
+
+type GetLogListRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *GetLogListRequest) Reset() {
+	*x = GetLogListRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_log_log_proto_msgTypes[6]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GetLogListRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetLogListRequest) ProtoMessage() {}
+
+func (x *GetLogListRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_log_log_proto_msgTypes[6]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetLogListRequest.ProtoReflect.Descriptor instead.
+func (*GetLogListRequest) Descriptor() ([]byte, []int) {
+	return file_log_log_proto_rawDescGZIP(), []int{6}
+}
+
+type GetLogListRequestByDate struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	StartDate *timestamppb.Timestamp `protobuf:"bytes,1,opt,name=startDate,proto3" json:"startDate,omitempty"`
+	EndDate   *timestamppb.Timestamp `protobuf:"bytes,2,opt,name=endDate,proto3" json:"endDate,omitempty"`
+}
+
+func (x *GetLogListRequestByDate) Reset() {
+	*x = GetLogListRequestByDate{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_log_log_proto_msgTypes[7]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GetLogListRequestByDate) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetLogListRequestByDate) ProtoMessage() {}
+
+func (x *GetLogListRequestByDate) ProtoReflect() protoreflect.Message {
+	mi := &file_log_log_proto_msgTypes[7]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetLogListRequestByDate.ProtoReflect.Descriptor instead.
+func (*GetLogListRequestByDate) Descriptor() ([]byte, []int) {
+	return file_log_log_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *GetLogListRequestByDate) GetStartDate() *timestamppb.Timestamp {
+	if x != nil {
+		return x.StartDate
+	}
+	return nil
+}
+
+func (x *GetLogListRequestByDate) GetEndDate() *timestamppb.Timestamp {
+	if x != nil {
+		return x.EndDate
+	}
+	return nil
+}
+
+type ListLogsByDateResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Log []*Log `protobuf:"bytes,1,rep,name=log,proto3" json:"log,omitempty"`
+}
+
+func (x *ListLogsByDateResponse) Reset() {
+	*x = ListLogsByDateResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_log_log_proto_msgTypes[8]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ListLogsByDateResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListLogsByDateResponse) ProtoMessage() {}
+
+func (x *ListLogsByDateResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_log_log_proto_msgTypes[8]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListLogsByDateResponse.ProtoReflect.Descriptor instead.
+func (*ListLogsByDateResponse) Descriptor() ([]byte, []int) {
+	return file_log_log_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *ListLogsByDateResponse) GetLog() []*Log {
+	if x != nil {
+		return x.Log
+	}
+	return nil
 }
 
 var File_log_log_proto protoreflect.FileDescriptor
 
 var file_log_log_proto_rawDesc = []byte{
 	0x0a, 0x0d, 0x6c, 0x6f, 0x67, 0x2f, 0x6c, 0x6f, 0x67, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12,
-	0x04, 0x6c, 0x6f, 0x67, 0x73, 0x22, 0x2d, 0x0a, 0x03, 0x4c, 0x6f, 0x67, 0x12, 0x12, 0x0a, 0x04,
-	0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65,
-	0x12, 0x12, 0x0a, 0x04, 0x64, 0x61, 0x74, 0x61, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04,
-	0x64, 0x61, 0x74, 0x61, 0x22, 0x33, 0x0a, 0x0a, 0x4c, 0x6f, 0x67, 0x52, 0x65, 0x71, 0x75, 0x65,
-	0x73, 0x74, 0x12, 0x25, 0x0a, 0x08, 0x6c, 0x6f, 0x67, 0x45, 0x6e, 0x74, 0x72, 0x79, 0x18, 0x01,
-	0x20, 0x01, 0x28, 0x0b, 0x32, 0x09, 0x2e, 0x6c, 0x6f, 0x67, 0x73, 0x2e, 0x4c, 0x6f, 0x67, 0x52,
-	0x08, 0x6c, 0x6f, 0x67, 0x45, 0x6e, 0x74, 0x72, 0x79, 0x22, 0x25, 0x0a, 0x0b, 0x4c, 0x6f, 0x67,
-	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x16, 0x0a, 0x06, 0x72, 0x65, 0x73, 0x75,
-	0x6c, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74,
-	0x32, 0x3d, 0x0a, 0x0a, 0x4c, 0x6f, 0x67, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x2f,
-	0x0a, 0x08, 0x57, 0x72, 0x69, 0x74, 0x65, 0x4c, 0x6f, 0x67, 0x12, 0x10, 0x2e, 0x6c, 0x6f, 0x67,
-	0x73, 0x2e, 0x4c, 0x6f, 0x67, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x11, 0x2e, 0x6c,
-	0x6f, 0x67, 0x73, 0x2e, 0x4c, 0x6f, 0x67, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x42,
-	0x06, 0x5a, 0x04, 0x2f, 0x6c, 0x6f, 0x67, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x03, 0x6c, 0x6f, 0x67, 0x1a, 0x1f, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2f, 0x70, 0x72, 0x6f,
+	0x74, 0x6f, 0x62, 0x75, 0x66, 0x2f, 0x74, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x2e,
+	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0x7d, 0x0a, 0x03, 0x4c, 0x6f, 0x67, 0x12, 0x0e, 0x0a, 0x02,
+	0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x12, 0x12, 0x0a, 0x04,
+	0x6e, 0x61, 0x6d, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65,
+	0x12, 0x18, 0x0a, 0x07, 0x63, 0x6f, 0x6e, 0x74, 0x65, 0x6e, 0x74, 0x18, 0x03, 0x20, 0x01, 0x28,
+	0x09, 0x52, 0x07, 0x63, 0x6f, 0x6e, 0x74, 0x65, 0x6e, 0x74, 0x12, 0x38, 0x0a, 0x09, 0x63, 0x72,
+	0x65, 0x61, 0x74, 0x65, 0x64, 0x41, 0x74, 0x18, 0x05, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e,
+	0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e,
+	0x54, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x52, 0x09, 0x63, 0x72, 0x65, 0x61, 0x74,
+	0x65, 0x64, 0x41, 0x74, 0x22, 0x28, 0x0a, 0x0a, 0x4c, 0x6f, 0x67, 0x52, 0x65, 0x71, 0x75, 0x65,
+	0x73, 0x74, 0x12, 0x1a, 0x0a, 0x03, 0x6c, 0x6f, 0x67, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32,
+	0x08, 0x2e, 0x6c, 0x6f, 0x67, 0x2e, 0x4c, 0x6f, 0x67, 0x52, 0x03, 0x6c, 0x6f, 0x67, 0x22, 0x29,
+	0x0a, 0x0b, 0x4c, 0x6f, 0x67, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x1a, 0x0a,
+	0x03, 0x6c, 0x6f, 0x67, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x08, 0x2e, 0x6c, 0x6f, 0x67,
+	0x2e, 0x4c, 0x6f, 0x67, 0x52, 0x03, 0x6c, 0x6f, 0x67, 0x22, 0x3d, 0x0a, 0x11, 0x4c, 0x6f, 0x67,
+	0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x0e,
+	0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x12, 0x18,
+	0x0a, 0x07, 0x73, 0x75, 0x63, 0x63, 0x65, 0x73, 0x73, 0x18, 0x02, 0x20, 0x01, 0x28, 0x08, 0x52,
+	0x07, 0x73, 0x75, 0x63, 0x63, 0x65, 0x73, 0x73, 0x22, 0x1f, 0x0a, 0x0d, 0x47, 0x65, 0x74, 0x4c,
+	0x6f, 0x67, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x22, 0x2e, 0x0a, 0x10, 0x4c, 0x69, 0x73,
+	0x74, 0x4c, 0x6f, 0x67, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x1a, 0x0a,
+	0x03, 0x6c, 0x6f, 0x67, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x08, 0x2e, 0x6c, 0x6f, 0x67,
+	0x2e, 0x4c, 0x6f, 0x67, 0x52, 0x03, 0x6c, 0x6f, 0x67, 0x22, 0x13, 0x0a, 0x11, 0x47, 0x65, 0x74,
+	0x4c, 0x6f, 0x67, 0x4c, 0x69, 0x73, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0x89,
+	0x01, 0x0a, 0x17, 0x47, 0x65, 0x74, 0x4c, 0x6f, 0x67, 0x4c, 0x69, 0x73, 0x74, 0x52, 0x65, 0x71,
+	0x75, 0x65, 0x73, 0x74, 0x42, 0x79, 0x44, 0x61, 0x74, 0x65, 0x12, 0x38, 0x0a, 0x09, 0x73, 0x74,
+	0x61, 0x72, 0x74, 0x44, 0x61, 0x74, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e,
+	0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e,
+	0x54, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x52, 0x09, 0x73, 0x74, 0x61, 0x72, 0x74,
+	0x44, 0x61, 0x74, 0x65, 0x12, 0x34, 0x0a, 0x07, 0x65, 0x6e, 0x64, 0x44, 0x61, 0x74, 0x65, 0x18,
+	0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70,
+	0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x54, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d,
+	0x70, 0x52, 0x07, 0x65, 0x6e, 0x64, 0x44, 0x61, 0x74, 0x65, 0x22, 0x34, 0x0a, 0x16, 0x4c, 0x69,
+	0x73, 0x74, 0x4c, 0x6f, 0x67, 0x73, 0x42, 0x79, 0x44, 0x61, 0x74, 0x65, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x12, 0x1a, 0x0a, 0x03, 0x6c, 0x6f, 0x67, 0x18, 0x01, 0x20, 0x03, 0x28,
+	0x0b, 0x32, 0x08, 0x2e, 0x6c, 0x6f, 0x67, 0x2e, 0x4c, 0x6f, 0x67, 0x52, 0x03, 0x6c, 0x6f, 0x67,
+	0x32, 0xf5, 0x01, 0x0a, 0x0a, 0x4c, 0x6f, 0x67, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12,
+	0x2e, 0x0a, 0x09, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x4c, 0x6f, 0x67, 0x12, 0x0f, 0x2e, 0x6c,
+	0x6f, 0x67, 0x2e, 0x4c, 0x6f, 0x67, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x10, 0x2e,
+	0x6c, 0x6f, 0x67, 0x2e, 0x4c, 0x6f, 0x67, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12,
+	0x37, 0x0a, 0x09, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x4c, 0x6f, 0x67, 0x12, 0x12, 0x2e, 0x6c,
+	0x6f, 0x67, 0x2e, 0x47, 0x65, 0x74, 0x4c, 0x6f, 0x67, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
+	0x1a, 0x16, 0x2e, 0x6c, 0x6f, 0x67, 0x2e, 0x4c, 0x6f, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65,
+	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x38, 0x0a, 0x07, 0x4c, 0x69, 0x73, 0x74,
+	0x4c, 0x6f, 0x67, 0x12, 0x16, 0x2e, 0x6c, 0x6f, 0x67, 0x2e, 0x47, 0x65, 0x74, 0x4c, 0x6f, 0x67,
+	0x4c, 0x69, 0x73, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x15, 0x2e, 0x6c, 0x6f,
+	0x67, 0x2e, 0x4c, 0x69, 0x73, 0x74, 0x4c, 0x6f, 0x67, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
+	0x73, 0x65, 0x12, 0x44, 0x0a, 0x0d, 0x4c, 0x69, 0x73, 0x74, 0x4c, 0x6f, 0x67, 0x42, 0x79, 0x44,
+	0x61, 0x74, 0x65, 0x12, 0x1c, 0x2e, 0x6c, 0x6f, 0x67, 0x2e, 0x47, 0x65, 0x74, 0x4c, 0x6f, 0x67,
+	0x4c, 0x69, 0x73, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x42, 0x79, 0x44, 0x61, 0x74,
+	0x65, 0x1a, 0x15, 0x2e, 0x6c, 0x6f, 0x67, 0x2e, 0x4c, 0x69, 0x73, 0x74, 0x4c, 0x6f, 0x67, 0x73,
+	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x42, 0x06, 0x5a, 0x04, 0x2f, 0x6c, 0x6f, 0x67,
+	0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -201,21 +548,40 @@ func file_log_log_proto_rawDescGZIP() []byte {
 	return file_log_log_proto_rawDescData
 }
 
-var file_log_log_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
+var file_log_log_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
 var file_log_log_proto_goTypes = []interface{}{
-	(*Log)(nil),         // 0: logs.Log
-	(*LogRequest)(nil),  // 1: logs.LogRequest
-	(*LogResponse)(nil), // 2: logs.LogResponse
+	(*Log)(nil),                     // 0: log.Log
+	(*LogRequest)(nil),              // 1: log.LogRequest
+	(*LogResponse)(nil),             // 2: log.LogResponse
+	(*LogDeleteResponse)(nil),       // 3: log.LogDeleteResponse
+	(*GetLogRequest)(nil),           // 4: log.GetLogRequest
+	(*ListLogsResponse)(nil),        // 5: log.ListLogsResponse
+	(*GetLogListRequest)(nil),       // 6: log.GetLogListRequest
+	(*GetLogListRequestByDate)(nil), // 7: log.GetLogListRequestByDate
+	(*ListLogsByDateResponse)(nil),  // 8: log.ListLogsByDateResponse
+	(*timestamppb.Timestamp)(nil),   // 9: google.protobuf.Timestamp
 }
 var file_log_log_proto_depIdxs = []int32{
-	0, // 0: logs.LogRequest.logEntry:type_name -> logs.Log
-	1, // 1: logs.LogService.WriteLog:input_type -> logs.LogRequest
-	2, // 2: logs.LogService.WriteLog:output_type -> logs.LogResponse
-	2, // [2:3] is the sub-list for method output_type
-	1, // [1:2] is the sub-list for method input_type
-	1, // [1:1] is the sub-list for extension type_name
-	1, // [1:1] is the sub-list for extension extendee
-	0, // [0:1] is the sub-list for field type_name
+	9,  // 0: log.Log.createdAt:type_name -> google.protobuf.Timestamp
+	0,  // 1: log.LogRequest.log:type_name -> log.Log
+	0,  // 2: log.LogResponse.log:type_name -> log.Log
+	0,  // 3: log.ListLogsResponse.log:type_name -> log.Log
+	9,  // 4: log.GetLogListRequestByDate.startDate:type_name -> google.protobuf.Timestamp
+	9,  // 5: log.GetLogListRequestByDate.endDate:type_name -> google.protobuf.Timestamp
+	0,  // 6: log.ListLogsByDateResponse.log:type_name -> log.Log
+	1,  // 7: log.LogService.CreateLog:input_type -> log.LogRequest
+	4,  // 8: log.LogService.DeleteLog:input_type -> log.GetLogRequest
+	6,  // 9: log.LogService.ListLog:input_type -> log.GetLogListRequest
+	7,  // 10: log.LogService.ListLogByDate:input_type -> log.GetLogListRequestByDate
+	2,  // 11: log.LogService.CreateLog:output_type -> log.LogResponse
+	3,  // 12: log.LogService.DeleteLog:output_type -> log.LogDeleteResponse
+	5,  // 13: log.LogService.ListLog:output_type -> log.ListLogsResponse
+	5,  // 14: log.LogService.ListLogByDate:output_type -> log.ListLogsResponse
+	11, // [11:15] is the sub-list for method output_type
+	7,  // [7:11] is the sub-list for method input_type
+	7,  // [7:7] is the sub-list for extension type_name
+	7,  // [7:7] is the sub-list for extension extendee
+	0,  // [0:7] is the sub-list for field type_name
 }
 
 func init() { file_log_log_proto_init() }
@@ -260,6 +626,78 @@ func file_log_log_proto_init() {
 				return nil
 			}
 		}
+		file_log_log_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*LogDeleteResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_log_log_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GetLogRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_log_log_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ListLogsResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_log_log_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GetLogListRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_log_log_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GetLogListRequestByDate); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_log_log_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ListLogsByDateResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -267,7 +705,7 @@ func file_log_log_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_log_log_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   3,
+			NumMessages:   9,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

@@ -1,22 +1,55 @@
 syntax = "proto3";
 
-package logs;
+package log;
 
+import "google/protobuf/timestamp.proto";
 option go_package = "/log";
 
 message Log {
-    string name = 1;
-    string data = 2;
+    string id = 1;
+    string name = 2;
+    string content = 3;
+    google.protobuf.Timestamp createdAt = 5;
 }
 
 message LogRequest {
-    Log logEntry = 1;
+    Log log = 1;
 }
 
 message LogResponse {
-    string result = 1;
+    Log log = 1;
+}
+
+message LogDeleteResponse {
+    string id = 1;
+    bool success = 2;
+}
+
+message GetLogRequest {
+    string id = 1;
+}
+
+message ListLogsResponse {
+    repeated Log log = 1;
+}
+
+message GetLogListRequest {
+
+}
+
+message GetLogListRequestByDate {
+    google.protobuf.Timestamp startDate = 1;
+    google.protobuf.Timestamp endDate = 2;
+
+}
+
+message ListLogsByDateResponse {
+    repeated Log log = 1;
 }
 
 service LogService {
-    rpc WriteLog(LogRequest) returns (LogResponse);
+    rpc CreateLog(LogRequest) returns (LogResponse);
+    rpc DeleteLog(GetLogRequest) returns (LogDeleteResponse);
+    rpc ListLog(GetLogListRequest) returns (ListLogsResponse);
+    rpc ListLogByDate(GetLogListRequestByDate) returns (ListLogsResponse);
 }

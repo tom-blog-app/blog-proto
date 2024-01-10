@@ -19,14 +19,20 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	LogService_WriteLog_FullMethodName = "/logs.LogService/WriteLog"
+	LogService_CreateLog_FullMethodName     = "/log.LogService/CreateLog"
+	LogService_DeleteLog_FullMethodName     = "/log.LogService/DeleteLog"
+	LogService_ListLog_FullMethodName       = "/log.LogService/ListLog"
+	LogService_ListLogByDate_FullMethodName = "/log.LogService/ListLogByDate"
 )
 
 // LogServiceClient is the client API for LogService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type LogServiceClient interface {
-	WriteLog(ctx context.Context, in *LogRequest, opts ...grpc.CallOption) (*LogResponse, error)
+	CreateLog(ctx context.Context, in *LogRequest, opts ...grpc.CallOption) (*LogResponse, error)
+	DeleteLog(ctx context.Context, in *GetLogRequest, opts ...grpc.CallOption) (*LogDeleteResponse, error)
+	ListLog(ctx context.Context, in *GetLogListRequest, opts ...grpc.CallOption) (*ListLogsResponse, error)
+	ListLogByDate(ctx context.Context, in *GetLogListRequestByDate, opts ...grpc.CallOption) (*ListLogsResponse, error)
 }
 
 type logServiceClient struct {
@@ -37,9 +43,36 @@ func NewLogServiceClient(cc grpc.ClientConnInterface) LogServiceClient {
 	return &logServiceClient{cc}
 }
 
-func (c *logServiceClient) WriteLog(ctx context.Context, in *LogRequest, opts ...grpc.CallOption) (*LogResponse, error) {
+func (c *logServiceClient) CreateLog(ctx context.Context, in *LogRequest, opts ...grpc.CallOption) (*LogResponse, error) {
 	out := new(LogResponse)
-	err := c.cc.Invoke(ctx, LogService_WriteLog_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, LogService_CreateLog_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *logServiceClient) DeleteLog(ctx context.Context, in *GetLogRequest, opts ...grpc.CallOption) (*LogDeleteResponse, error) {
+	out := new(LogDeleteResponse)
+	err := c.cc.Invoke(ctx, LogService_DeleteLog_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *logServiceClient) ListLog(ctx context.Context, in *GetLogListRequest, opts ...grpc.CallOption) (*ListLogsResponse, error) {
+	out := new(ListLogsResponse)
+	err := c.cc.Invoke(ctx, LogService_ListLog_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *logServiceClient) ListLogByDate(ctx context.Context, in *GetLogListRequestByDate, opts ...grpc.CallOption) (*ListLogsResponse, error) {
+	out := new(ListLogsResponse)
+	err := c.cc.Invoke(ctx, LogService_ListLogByDate_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -50,7 +83,10 @@ func (c *logServiceClient) WriteLog(ctx context.Context, in *LogRequest, opts ..
 // All implementations must embed UnimplementedLogServiceServer
 // for forward compatibility
 type LogServiceServer interface {
-	WriteLog(context.Context, *LogRequest) (*LogResponse, error)
+	CreateLog(context.Context, *LogRequest) (*LogResponse, error)
+	DeleteLog(context.Context, *GetLogRequest) (*LogDeleteResponse, error)
+	ListLog(context.Context, *GetLogListRequest) (*ListLogsResponse, error)
+	ListLogByDate(context.Context, *GetLogListRequestByDate) (*ListLogsResponse, error)
 	mustEmbedUnimplementedLogServiceServer()
 }
 
@@ -58,8 +94,17 @@ type LogServiceServer interface {
 type UnimplementedLogServiceServer struct {
 }
 
-func (UnimplementedLogServiceServer) WriteLog(context.Context, *LogRequest) (*LogResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method WriteLog not implemented")
+func (UnimplementedLogServiceServer) CreateLog(context.Context, *LogRequest) (*LogResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateLog not implemented")
+}
+func (UnimplementedLogServiceServer) DeleteLog(context.Context, *GetLogRequest) (*LogDeleteResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteLog not implemented")
+}
+func (UnimplementedLogServiceServer) ListLog(context.Context, *GetLogListRequest) (*ListLogsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListLog not implemented")
+}
+func (UnimplementedLogServiceServer) ListLogByDate(context.Context, *GetLogListRequestByDate) (*ListLogsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListLogByDate not implemented")
 }
 func (UnimplementedLogServiceServer) mustEmbedUnimplementedLogServiceServer() {}
 
@@ -74,20 +119,74 @@ func RegisterLogServiceServer(s grpc.ServiceRegistrar, srv LogServiceServer) {
 	s.RegisterService(&LogService_ServiceDesc, srv)
 }
 
-func _LogService_WriteLog_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _LogService_CreateLog_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(LogRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(LogServiceServer).WriteLog(ctx, in)
+		return srv.(LogServiceServer).CreateLog(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: LogService_WriteLog_FullMethodName,
+		FullMethod: LogService_CreateLog_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LogServiceServer).WriteLog(ctx, req.(*LogRequest))
+		return srv.(LogServiceServer).CreateLog(ctx, req.(*LogRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _LogService_DeleteLog_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetLogRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(LogServiceServer).DeleteLog(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: LogService_DeleteLog_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(LogServiceServer).DeleteLog(ctx, req.(*GetLogRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _LogService_ListLog_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetLogListRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(LogServiceServer).ListLog(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: LogService_ListLog_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(LogServiceServer).ListLog(ctx, req.(*GetLogListRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _LogService_ListLogByDate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetLogListRequestByDate)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(LogServiceServer).ListLogByDate(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: LogService_ListLogByDate_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(LogServiceServer).ListLogByDate(ctx, req.(*GetLogListRequestByDate))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -96,12 +195,24 @@ func _LogService_WriteLog_Handler(srv interface{}, ctx context.Context, dec func
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var LogService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "logs.LogService",
+	ServiceName: "log.LogService",
 	HandlerType: (*LogServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "WriteLog",
-			Handler:    _LogService_WriteLog_Handler,
+			MethodName: "CreateLog",
+			Handler:    _LogService_CreateLog_Handler,
+		},
+		{
+			MethodName: "DeleteLog",
+			Handler:    _LogService_DeleteLog_Handler,
+		},
+		{
+			MethodName: "ListLog",
+			Handler:    _LogService_ListLog_Handler,
+		},
+		{
+			MethodName: "ListLogByDate",
+			Handler:    _LogService_ListLogByDate_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
