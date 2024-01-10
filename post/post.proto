@@ -41,11 +41,15 @@ message ListPostsResponse {
   repeated Post posts = 1;
 }
 
+message GetPostsListResponse {
+  repeated Post posts = 1;
+}
+
 service PostService {
   rpc CreatePost(PostRequest) returns (PostResponse);
   rpc GetPost(GetPostRequest) returns (PostResponse);
   rpc UpdatePost(PostRequest) returns (PostResponse);
-  rpc DeletePost(GetPostListRequest) returns (PostDeleteResponse);
-  rpc ListPosts(GetPostListRequest) returns (ListPostsResponse);
-  rpc ListPostsByAuthor(GetPostListByAuthorRequest) returns (ListPostsResponse);
+  rpc DeletePost(GetPostRequest) returns (PostDeleteResponse);
+  rpc ListPosts(GetPostListRequest) returns (GetPostsListResponse);
+  rpc ListPostsByAuthor(GetPostListByAuthorRequest) returns (GetPostsListResponse);
 }
