@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package comment;
+
+import "google/protobuf/timestamp.proto";
+option go_package = "/comment";
+
+message Comment {
+  string id = 1;
+  string title = 2;
+  string content = 3;
+  string authorId = 4;
+  string postId = 5;
+  google.protobuf.Timestamp createdAt = 6;
+  google.protobuf.Timestamp updatedAt = 7;
+}
+
+message CommentRequest {
+  Comment comment = 1;
+}
+
+message PostResponse {
+  Comment comment = 1;
+}
+
+message CommentDeleteResponse {
+  string id = 1;
+  bool success = 2;
+}
+
+message GetCommentRequest {
+  string id = 1;
+}
+
+message ListCommentResponse {
+  repeated Comment comments = 1;
+}
+
+service PostService {
+  rpc CreateComment(CommentRequest) returns (PostResponse);
+  rpc GetComment(GetCommentRequest) returns (PostResponse);
+  rpc UpdateComment(CommentRequest) returns (PostResponse);
+  rpc DeleteComment(GetCommentRequest) returns (CommentDeleteResponse);
+  rpc ListCommentByAuthor(GetCommentRequest) returns (ListCommentResponse);
+  rpc ListCommentByPost(GetCommentRequest) returns (ListCommentResponse);
+}
