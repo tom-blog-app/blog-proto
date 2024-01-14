@@ -33,7 +33,7 @@ const (
 type PostServiceClient interface {
 	CreatePost(ctx context.Context, in *PostRequest, opts ...grpc.CallOption) (*PostResponse, error)
 	GetPost(ctx context.Context, in *GetPostRequest, opts ...grpc.CallOption) (*PostResponse, error)
-	UpdatePost(ctx context.Context, in *PostRequest, opts ...grpc.CallOption) (*PostResponse, error)
+	UpdatePost(ctx context.Context, in *UpdatePostRequest, opts ...grpc.CallOption) (*PostResponse, error)
 	DeletePost(ctx context.Context, in *GetPostRequest, opts ...grpc.CallOption) (*PostDeleteResponse, error)
 	ListPosts(ctx context.Context, in *GetPostListRequest, opts ...grpc.CallOption) (*GetPostsListResponse, error)
 	ListPostsByAuthor(ctx context.Context, in *GetPostListByAuthorRequest, opts ...grpc.CallOption) (*GetPostsListResponse, error)
@@ -65,7 +65,7 @@ func (c *postServiceClient) GetPost(ctx context.Context, in *GetPostRequest, opt
 	return out, nil
 }
 
-func (c *postServiceClient) UpdatePost(ctx context.Context, in *PostRequest, opts ...grpc.CallOption) (*PostResponse, error) {
+func (c *postServiceClient) UpdatePost(ctx context.Context, in *UpdatePostRequest, opts ...grpc.CallOption) (*PostResponse, error) {
 	out := new(PostResponse)
 	err := c.cc.Invoke(ctx, PostService_UpdatePost_FullMethodName, in, out, opts...)
 	if err != nil {
@@ -107,7 +107,7 @@ func (c *postServiceClient) ListPostsByAuthor(ctx context.Context, in *GetPostLi
 type PostServiceServer interface {
 	CreatePost(context.Context, *PostRequest) (*PostResponse, error)
 	GetPost(context.Context, *GetPostRequest) (*PostResponse, error)
-	UpdatePost(context.Context, *PostRequest) (*PostResponse, error)
+	UpdatePost(context.Context, *UpdatePostRequest) (*PostResponse, error)
 	DeletePost(context.Context, *GetPostRequest) (*PostDeleteResponse, error)
 	ListPosts(context.Context, *GetPostListRequest) (*GetPostsListResponse, error)
 	ListPostsByAuthor(context.Context, *GetPostListByAuthorRequest) (*GetPostsListResponse, error)
@@ -124,7 +124,7 @@ func (UnimplementedPostServiceServer) CreatePost(context.Context, *PostRequest) 
 func (UnimplementedPostServiceServer) GetPost(context.Context, *GetPostRequest) (*PostResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetPost not implemented")
 }
-func (UnimplementedPostServiceServer) UpdatePost(context.Context, *PostRequest) (*PostResponse, error) {
+func (UnimplementedPostServiceServer) UpdatePost(context.Context, *UpdatePostRequest) (*PostResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdatePost not implemented")
 }
 func (UnimplementedPostServiceServer) DeletePost(context.Context, *GetPostRequest) (*PostDeleteResponse, error) {
@@ -186,7 +186,7 @@ func _PostService_GetPost_Handler(srv interface{}, ctx context.Context, dec func
 }
 
 func _PostService_UpdatePost_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(PostRequest)
+	in := new(UpdatePostRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -198,7 +198,7 @@ func _PostService_UpdatePost_Handler(srv interface{}, ctx context.Context, dec f
 		FullMethod: PostService_UpdatePost_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PostServiceServer).UpdatePost(ctx, req.(*PostRequest))
+		return srv.(PostServiceServer).UpdatePost(ctx, req.(*UpdatePostRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
