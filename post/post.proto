@@ -15,7 +15,9 @@ message Post {
 }
 
 message PostRequest {
-  Post post = 1;
+  string title = 1;
+  string content = 2;
+  string authorId = 3;
 }
 
 message PostResponse {
